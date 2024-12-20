@@ -8,15 +8,14 @@ import authRoutes from "./routes/auth.route.js";
 
 // console.log(process.env.DATABASE_CONNECTION_URL)
 
-
 mongoose
-.connect(process.env.DATABASE_CONNECTION_URL)
-.then(() => {
+  .connect(process.env.DATABASE_CONNECTION_URL)
+  .then(() => {
     console.log("connection established");
-})
-.catch((res) => {
+  })
+  .catch((res) => {
     console.log("connection failed:" + res);
-});
+  });
 
 const app = express();
 
@@ -29,3 +28,13 @@ app.listen(5000, () => {
 app.use("/api/user", userRoutes);
 
 app.use("/api/auth", authRoutes);
+
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || "Internal Server Error";
+  res.status(statusCode).json({
+    success: false,
+    statusCode,
+    message,
+  });
+});

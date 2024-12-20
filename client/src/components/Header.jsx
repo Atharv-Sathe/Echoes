@@ -4,7 +4,7 @@ import { FaMoon } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 
 export default function Header() {
-    const path = useLocation().pathname;
+  const path = useLocation().pathname;
   return (
     <Navbar className="border-b-orange-500 border-b-2">
       <Link
@@ -31,7 +31,9 @@ export default function Header() {
           <FaMoon />
         </Button>
         <Link to="/sign-in">
-          <Button gradientDuoTone="redToYellow">Sign In</Button>
+          <Button gradientDuoTone="redToYellow" outline>
+            Sign In
+          </Button>
         </Link>
         <Navbar.Toggle />
       </div>

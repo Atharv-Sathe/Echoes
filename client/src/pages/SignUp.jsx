@@ -4,6 +4,7 @@ import { IoMdMail } from "react-icons/io";
 import { IoPerson } from "react-icons/io5";
 import { TbLockPassword } from "react-icons/tb";
 import { useState } from "react";
+import Logo from "../components/Logo";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
@@ -48,14 +49,7 @@ export default function SignUp() {
       <div className="flex p-3 max-w-3xl mx-auto flex-col md:flex-row md:items-center gap-5">
         {/* left */}
         <div className="flex-1">
-          <Link
-            to="/"
-            className="text-4xl sm:text-xl font-bold dark:text-white"
-          >
-            <span className="px-2 py-1 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-md">
-              Echoes
-            </span>
-          </Link>
+          <Logo textSize="text-4xl sm:text-xl" />
           <p className="text-sm mt-5">
             Welcome to echoes, signup with your email and password or with
             google.

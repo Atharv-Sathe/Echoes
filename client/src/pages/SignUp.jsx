@@ -4,18 +4,20 @@ import { IoMdMail } from "react-icons/io";
 import { IoPerson } from "react-icons/io5";
 import { TbLockPassword } from "react-icons/tb";
 import { useState } from "react";
+import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
 import Logo from "../components/Logo";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
   const [errorMessage, setErrorMessage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [showPass, setShowPass] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
-  console.log(formData);
+  // console.log(formData);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,7 +38,7 @@ export default function SignUp() {
       }
       setLoading(false);
       if (res.ok) {
-        return navigate('/sign-in')
+        return navigate("/sign-in");
       }
     } catch (error) {
       setErrorMessage(error.message);
@@ -70,7 +72,7 @@ export default function SignUp() {
                 onChange={handleChange}
               />
             </div>
-            <div>
+            <div className="relative">
               <Label value="Your Password" />
               <TextInput
                 type="password"
@@ -80,6 +82,13 @@ export default function SignUp() {
                 rightIcon={TbLockPassword}
                 onChange={handleChange}
               />
+              <button
+                className="absolute top-10 right-12"
+                type="button"
+                onClick={() => setShowPass(!showPass)}
+              >
+                {!showPass ? <FaRegEyeSlash /> : <FaRegEye />}
+              </button>
             </div>
             <div>
               <Label value="Your Email" />

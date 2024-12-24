@@ -73,3 +73,55 @@ export const signin = async (req, res, next) => {
     next(error);
   }
 };
+
+export const googleSignin = async (req, res, next) => {
+  const { email, name, googlePhotoURL } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (user) {
+      const token = jwt.sign(
+        { id: validUser._id },
+        process.env.JWT_SECRET_KEY,
+        {
+          expiresIn: "1d",
+        }
+      );
+      const { password: pass, ...rest } = validUser._doc;
+      res
+        .status(200)
+        .cookie("access_token", token, {
+          httpOnly: true,
+        })
+        .json(rest);
+    } else {
+      const sysGenPass = Math.random().toString(36).slice(-8) + email;
+      const sysGenUserName =
+        name.toLowerCase().replace("/s+/g", "") +
+        Math.random().toString(9).slice(-4);
+      const hashedPass = bcryptjs.hashSync(sysGenPass, 7);
+
+      const newUser = new User({
+        username: sysGenUserName,
+        email,
+        password: hashedPass,
+        profilePicture: googlePhotoURL,
+      });
+
+      await newUser.save();
+      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET_KEY, {
+        expiresIn: "1d",
+      });
+      const { password: pass, ...rest } = newUser._doc;
+      res
+        .status(200)
+        .cookie("access_token", token, {
+          httpOnly: true,
+        })
+        .json(rest);
+    }
+  } catch (error) {
+    next(error);
+  }
+};

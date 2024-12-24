@@ -6,8 +6,6 @@ import "dotenv/config";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
 
-// console.log(process.env.DATABASE_CONNECTION_URL)
-
 mongoose
   .connect(process.env.DATABASE_CONNECTION_URL)
   .then(() => {

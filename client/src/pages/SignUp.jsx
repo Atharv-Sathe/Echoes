@@ -6,6 +6,7 @@ import { TbLockPassword } from "react-icons/tb";
 import { useState } from "react";
 import { FaRegEyeSlash, FaRegEye } from "react-icons/fa";
 import Logo from "../components/Logo";
+import OAuth from "../components/OAuth";
 
 export default function SignUp() {
   const [formData, setFormData] = useState({});
@@ -70,6 +71,7 @@ export default function SignUp() {
                 className="focus:border-orange-500 focus:ring-orange-500"
                 rightIcon={IoPerson}
                 onChange={handleChange}
+                required={true}
               />
             </div>
             <div className="relative">
@@ -81,6 +83,7 @@ export default function SignUp() {
                 className="focus:border-orange-500 focus:ring-orange-500"
                 rightIcon={TbLockPassword}
                 onChange={handleChange}
+                required={true}
               />
               <button
                 className="absolute top-10 right-12"
@@ -99,6 +102,7 @@ export default function SignUp() {
                 className="focus:border-orange-500 focus:ring-orange-500"
                 rightIcon={IoMdMail}
                 onChange={handleChange}
+                required={true}
               />
             </div>
             <Button
@@ -115,6 +119,7 @@ export default function SignUp() {
                 "Sign Up"
               )}
             </Button>
+            <OAuth/>
           </form>
           <div className="flex gap-2 mt-5">
             <span>Have an account?</span>

@@ -9,7 +9,7 @@ const rootReducer = combineReducers({
 });
 
 const persistConfig = {
-  key: "root",
+  key: "echoes",
   storage,
   version: 1,
 };

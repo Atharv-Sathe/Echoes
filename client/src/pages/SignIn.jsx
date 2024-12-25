@@ -11,6 +11,7 @@ import {
   signInFailure,
 } from "../redux/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
+import OAuth from "../components/OAuth";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -73,6 +74,7 @@ export default function SignIn() {
                 className="focus:border-orange-500 focus:ring-orange-500"
                 rightIcon={IoMdMail}
                 onChange={handleChange}
+                required={true}
               />
             </div>
             <div className="relative">
@@ -84,6 +86,7 @@ export default function SignIn() {
                 className="focus:border-orange-500 focus:ring-orange-500"
                 rightIcon={TbLockPassword}
                 onChange={handleChange}
+                required={true}
               />
               <button
                 className="absolute top-10 right-12"
@@ -107,6 +110,7 @@ export default function SignIn() {
                 "Sign In"
               )}
             </Button>
+            <OAuth/>
           </form>
           <div className="flex gap-2 mt-5">
             <span>Don&apos;t have an account?</span>

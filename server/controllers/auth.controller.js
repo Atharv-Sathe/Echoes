@@ -79,16 +79,15 @@ export const googleSignin = async (req, res, next) => {
 
   try {
     const user = await User.findOne({ email });
-
     if (user) {
       const token = jwt.sign(
-        { id: validUser._id },
+        { id: user._id },
         process.env.JWT_SECRET_KEY,
         {
           expiresIn: "1d",
         }
       );
-      const { password: pass, ...rest } = validUser._doc;
+      const { password: pass, ...rest } = user._doc;
       res
         .status(200)
         .cookie("access_token", token, {
@@ -98,7 +97,7 @@ export const googleSignin = async (req, res, next) => {
     } else {
       const sysGenPass = Math.random().toString(36).slice(-8) + email;
       const sysGenUserName =
-        name.toLowerCase().split(" ").join('') +
+        name.toLowerCase().split(" ").join("") +
         Math.random().toString(9).slice(-4);
       const hashedPass = bcryptjs.hashSync(sysGenPass, 7);
 

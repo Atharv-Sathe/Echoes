@@ -98,7 +98,7 @@ export const googleSignin = async (req, res, next) => {
     } else {
       const sysGenPass = Math.random().toString(36).slice(-8) + email;
       const sysGenUserName =
-        name.toLowerCase().replace("/s+/g", "") +
+        name.toLowerCase().split(" ").join('') +
         Math.random().toString(9).slice(-4);
       const hashedPass = bcryptjs.hashSync(sysGenPass, 7);
 

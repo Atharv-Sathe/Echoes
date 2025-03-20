@@ -7,6 +7,7 @@ export const test = (req, res) => {
 };
 
 export const updateUser = async (req, res, next) => {
+  // console.log("Update User Called", req.body);
   // If the ID received after verification is not same as the param id then don't allow user to update.
   if (req.user.id !== req.params.userId) {
     return next(errorHandler(403, "You are not allowed to update this user!"));
@@ -54,6 +55,7 @@ export const updateUser = async (req, res, next) => {
         { new: true }
       );
       const { password, ...rest } = updatedUser._doc;
+      // console.log("Updated User", rest);
       res.status(200).json(rest);
     } catch (error) {
       next(error);

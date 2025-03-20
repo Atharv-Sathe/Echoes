@@ -5,6 +5,7 @@ import "dotenv/config";
 // routes
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
+import cookieParser from "cookie-parser";
 
 mongoose
   .connect(process.env.DATABASE_CONNECTION_URL)
@@ -18,6 +19,7 @@ mongoose
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 
 app.listen(5000, () => {
   console.log("Server Live at 5000");

@@ -8,6 +8,7 @@ import {
   TextInput,
 } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import {
   updateStart,
   updateSuccess,
@@ -203,23 +204,33 @@ export default function DashProfile() {
         >
           {loading ? "Updating.." : "Update"}
         </Button>
-        <div className="text-red-500 flex justify-between mt-5">
-          <span
-            onClick={() => setShowDeletePopup(true)}
-            className="cursor-pointer hover:text-zinc-200"
-            ref={deleteButtonRef}
-            tabIndex="-1"
-          >
-            Delete Account
-          </span>
-          <span
-            className="cursor-pointer hover:text-zinc-200"
-            onClick={handleSignout}
-          >
-            Sign Out
-          </span>
-        </div>
       </form>
+      <Link to={'create-post'}>
+        <Button
+          type="button"
+          className="max-w-lg mx-auto p-1 mt-4 w-full"
+          gradientDuoTone="purpleToPink"
+        >
+          Create a post
+        </Button>
+      </Link>
+
+      <div className="text-red-500 flex justify-between mt-5">
+        <span
+          onClick={() => setShowDeletePopup(true)}
+          className="cursor-pointer hover:text-zinc-200"
+          ref={deleteButtonRef}
+          tabIndex="-1"
+        >
+          Delete Account
+        </span>
+        <span
+          className="cursor-pointer hover:text-zinc-200"
+          onClick={handleSignout}
+        >
+          Sign Out
+        </span>
+      </div>
 
       {updateUserSuccess && (
         <Alert color="success" className="mt-5">

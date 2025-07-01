@@ -6,7 +6,7 @@ export const test = (req, res) => {
   res.json({ message: "api is working" });
 };
 
-// 
+//
 export const updateUser = async (req, res, next) => {
   // console.log("Update User Called", req.body);
   // If the ID received after verification is not same as the param id then don't allow user to update.
@@ -66,23 +66,22 @@ export const updateUser = async (req, res, next) => {
 
 // Function responsible for deleting an user account
 export const deleteUser = async (req, res, next) => {
-
   if (req.user.id !== req.params.userId) {
-    return next(errorHandler(403, "You are not allowed to delete this user!"))
+    return next(errorHandler(403, "You are not allowed to delete this user!"));
   }
 
   try {
     // console.log(req.user); // RIP
     const deletedUser = await User.findByIdAndDelete(req.user.id);
-    
-    if (deletedUser) {
-      res.status(200).json({success : 'true', message: `User successfully deleted.`})
-    } else {
-      res.status(404).json({success : 'false', message: `User Not Found.`})
-    }
 
+    if (deletedUser) {
+      res
+        .status(200)
+        .json({ success: "true", message: `User successfully deleted.` });
+    } else {
+      next(errorHandler(404, "User Not Found!"));
+    }
   } catch (error) {
-    console.log("Error occurred baby!")
     next(error);
   }
-}
+};

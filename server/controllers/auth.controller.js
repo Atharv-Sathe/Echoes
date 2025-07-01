@@ -59,7 +59,7 @@ export const signin = async (req, res, next) => {
       return next(errorHandler(400, "Wrong Password"));
     }
 
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET_KEY, {
+    const token = jwt.sign({ id: validUser._id, isAdmin: validUser.isAdmin }, process.env.JWT_SECRET_KEY, {
       expiresIn: "1d",
     });
     const { password: pass, ...rest } = validUser._doc;
@@ -109,7 +109,7 @@ export const googleSignin = async (req, res, next) => {
       });
 
       await newUser.save();
-      const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET_KEY, {
+      const token = jwt.sign({ id: newUser._id, isAdmin: newUser.isAdmin }, process.env.JWT_SECRET_KEY, {
         expiresIn: "1d",
       });
       const { password: pass, ...rest } = newUser._doc;

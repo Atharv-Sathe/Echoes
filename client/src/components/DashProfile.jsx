@@ -1,22 +1,42 @@
-import { Alert, Button, Label, TextInput } from "flowbite-react";
+import {
+  Alert,
+  Button,
+  Label,
+  Modal,
+  ModalBody,
+  ModalHeader,
+  Spinner,
+  TextInput,
+} from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
 import {
   updateStart,
   updateSuccess,
   updateFailure,
+  deleteUserStart,
+  deleteUserFailure,
+  deleteUserSuccess,
+  signoutFailure,
+  signoutSuccess,
 } from "../redux/user/userSlice";
 import { useSelector, useDispatch } from "react-redux";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 export default function DashProfile() {
-  const { currentUser } = useSelector((state) => state.user);
+  const { theme } = useSelector((state) => state.theme);
+
+  const { currentUser, error, loading } = useSelector((state) => state.user);
   // const [imageFile, setImageFile] = useState(null);
   const [imageFileUrl, setImageFileUrl] = useState(null);
   const [updateUserSuccess, setUpdateUserSuccess] = useState(null);
   const [updateUserFailure, setUpdateUserFailure] = useState(null);
   const [formData, setFormData] = useState({});
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
   const dispatch = useDispatch();
 
   const filePickerRef = useRef();
+
+  const deleteButtonRef = useRef(null);
 
   const handleImageChange = (e) => {
     // const file = e.target.files[0];
@@ -68,7 +88,7 @@ export default function DashProfile() {
     }
   };
 
-  console.log(formData); // Remove in prod
+  // console.log(formData); // Remove in prod
   // useEffect(() => {
   //   if (imageFile) {
   //     uploadImage();
@@ -82,6 +102,51 @@ export default function DashProfile() {
   //   );
   //   console.error("Thank You for your patience.");
   // };
+
+  const handleDeleteUser = async () => {
+    try {
+      dispatch(deleteUserStart());
+      const response = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE",
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        dispatch(deleteUserFailure(data.message));
+      } else {
+        dispatch(deleteUserSuccess(data));
+      }
+    } catch (error) {
+      dispatch(deleteUserFailure(error.message));
+    } finally {
+      setShowDeletePopup(false);
+    }
+  };
+
+  const handleCloseModal = () => {
+    setShowDeletePopup(false);
+
+    // Brings back the focus to delete button which opened the modal.
+    // Prevents page from scrolling back to top if user hits, no on delete popup.
+    setTimeout(() => {
+      deleteButtonRef.current?.focus();
+    }, 0);
+  };
+
+  const handleSignout = async () => {
+    try {
+      const response = await fetch("/api/user/signout", {
+        method: "POST",
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        dispatch(signoutFailure(data.message));
+      } else {
+        dispatch(signoutSuccess(data));
+      }
+    } catch (error) {
+      dispatch(signoutFailure(error.message));
+    }
+  };
 
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
@@ -134,8 +199,17 @@ export default function DashProfile() {
           Update
         </Button>
         <div className="text-red-500 flex justify-between mt-5">
-          <span className="cursor-pointer">Delete Account</span>
-          <span className="cursor-pointer">Sign Out</span>
+          <span
+            onClick={() => setShowDeletePopup(true)}
+            className="cursor-pointer hover:text-zinc-200"
+            ref={deleteButtonRef}
+            tabIndex="-1"
+          >
+            Delete Account
+          </span>
+          <span className="cursor-pointer hover:text-zinc-200" onClick={handleSignout}>
+            Sign Out
+          </span>
         </div>
       </form>
 
@@ -150,6 +224,53 @@ export default function DashProfile() {
           {updateUserFailure}
         </Alert>
       )}
+
+      {error && (
+        <Alert color="failure" className="mt-5">
+          {error}
+        </Alert>
+      )}
+
+      <Modal
+        show={showDeletePopup}
+        dismissible
+        popup
+        onClose={handleCloseModal}
+        className={theme}
+        size="md"
+      >
+        <ModalHeader />
+        <ModalBody>
+          <div className="text-center">
+            <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-red-600" />
+            <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-200">
+              Are you sure you want to delete this account?<br></br> (This
+              action is not reversible!)
+            </h3>
+            <div className="flex justify-center gap-4">
+              {!loading && (
+                <Button color="red" onClick={() => handleDeleteUser()}>
+                  Yes, I&apos;m sure
+                </Button>
+              )}
+              {loading && (
+                <Button color="red">
+                  <Spinner aria-label="Deleting user..." size="sm" light />
+                  <span className="pl-3">Deleting...</span>
+                </Button>
+              )}
+              <Button
+                type="button"
+                color="alternative"
+                className="hover:bg-zinc-200"
+                onClick={handleCloseModal}
+              >
+                No, cancel
+              </Button>
+            </div>
+          </div>
+        </ModalBody>
+      </Modal>
     </div>
   );
 }

@@ -5,7 +5,6 @@ import {
   Modal,
   ModalBody,
   ModalHeader,
-  Spinner,
   TextInput,
 } from "flowbite-react";
 import { useEffect, useRef, useState } from "react";
@@ -21,6 +20,7 @@ import {
 } from "../redux/user/userSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { LoaderButton } from "./LoaderButton";
 
 export default function DashProfile() {
   const { theme } = useSelector((state) => state.theme);
@@ -195,8 +195,13 @@ export default function DashProfile() {
           placeholder="password"
           onChange={handleInputChange}
         />
-        <Button type="submit" gradientDuoTone="pinkToOrange" outline>
-          Update
+        <Button
+          type="submit"
+          gradientDuoTone="pinkToOrange"
+          outline
+          disabled={loading}
+        >
+          {loading ? "Updating.." : "Update"}
         </Button>
         <div className="text-red-500 flex justify-between mt-5">
           <span
@@ -207,7 +212,10 @@ export default function DashProfile() {
           >
             Delete Account
           </span>
-          <span className="cursor-pointer hover:text-zinc-200" onClick={handleSignout}>
+          <span
+            className="cursor-pointer hover:text-zinc-200"
+            onClick={handleSignout}
+          >
             Sign Out
           </span>
         </div>
@@ -253,12 +261,7 @@ export default function DashProfile() {
                   Yes, I&apos;m sure
                 </Button>
               )}
-              {loading && (
-                <Button color="red">
-                  <Spinner aria-label="Deleting user..." size="sm" light />
-                  <span className="pl-3">Deleting...</span>
-                </Button>
-              )}
+              {loading && <LoaderButton text="Deleting" />}
               <Button
                 type="button"
                 color="alternative"

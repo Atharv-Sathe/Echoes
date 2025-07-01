@@ -16,6 +16,8 @@ import {
   deleteUserStart,
   deleteUserFailure,
   deleteUserSuccess,
+  signoutFailure,
+  signoutSuccess,
 } from "../redux/user/userSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
@@ -86,7 +88,7 @@ export default function DashProfile() {
     }
   };
 
-  console.log(formData); // Remove in prod
+  // console.log(formData); // Remove in prod
   // useEffect(() => {
   //   if (imageFile) {
   //     uploadImage();
@@ -111,7 +113,7 @@ export default function DashProfile() {
       if (!response.ok) {
         dispatch(deleteUserFailure(data.message));
       } else {
-        dispatch(deleteUserSuccess());
+        dispatch(deleteUserSuccess(data));
       }
     } catch (error) {
       dispatch(deleteUserFailure(error.message));
@@ -128,7 +130,23 @@ export default function DashProfile() {
     setTimeout(() => {
       deleteButtonRef.current?.focus();
     }, 0);
-  }
+  };
+
+  const handleSignout = async () => {
+    try {
+      const response = await fetch("/api/user/signout", {
+        method: "POST",
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        dispatch(signoutFailure(data.message));
+      } else {
+        dispatch(signoutSuccess(data));
+      }
+    } catch (error) {
+      dispatch(signoutFailure(error.message));
+    }
+  };
 
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
@@ -183,13 +201,15 @@ export default function DashProfile() {
         <div className="text-red-500 flex justify-between mt-5">
           <span
             onClick={() => setShowDeletePopup(true)}
-            className="cursor-pointer"
+            className="cursor-pointer hover:text-zinc-200"
             ref={deleteButtonRef}
             tabIndex="-1"
           >
             Delete Account
           </span>
-          <span className="cursor-pointer">Sign Out</span>
+          <span className="cursor-pointer hover:text-zinc-200" onClick={handleSignout}>
+            Sign Out
+          </span>
         </div>
       </form>
 

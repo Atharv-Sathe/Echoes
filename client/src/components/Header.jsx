@@ -6,12 +6,30 @@ import { PiSignOutBold } from "react-icons/pi";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { toggleTheme } from "../redux/theme/themeSlice";
+import { signoutFailure, signoutSuccess } from "../redux/user/userSlice";
 
 export default function Header() {
   const path = useLocation().pathname;
   const { currentUser } = useSelector((state) => state.user);
   const { theme } = useSelector((state) => state.theme);
   const dispatch = useDispatch();
+
+  const handleSignout = async () => {
+    try {
+      const response = await fetch("/api/user/signout", {
+        method: "POST",
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        dispatch(signoutFailure(data.message));
+      } else {
+        dispatch(signoutSuccess(data));
+      }
+    } catch (error) {
+      dispatch(signoutFailure(error.message));
+    }
+  };
+
 
   return (
     <Navbar className="border-b-orange-500 border-b-2">
@@ -69,7 +87,7 @@ export default function Header() {
               <Dropdown.Item icon={IoPerson}>Dashboard</Dropdown.Item>
             </Link>
             <Dropdown.Divider />
-            <Dropdown.Item icon={PiSignOutBold}>Sign out</Dropdown.Item>
+            <Dropdown.Item icon={PiSignOutBold} onClick={handleSignout}>Sign out</Dropdown.Item>
           </Dropdown>
         ) : (
           <Link to="/sign-in">

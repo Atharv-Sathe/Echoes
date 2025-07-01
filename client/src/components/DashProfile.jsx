@@ -34,6 +34,8 @@ export default function DashProfile() {
 
   const filePickerRef = useRef();
 
+  const deleteButtonRef = useRef(null);
+
   const handleImageChange = (e) => {
     // const file = e.target.files[0];
     // if (file) {
@@ -118,6 +120,16 @@ export default function DashProfile() {
     }
   };
 
+  const handleCloseModal = () => {
+    setShowDeletePopup(false);
+
+    // Brings back the focus to delete button which opened the modal.
+    // Prevents page from scrolling back to top if user hits, no on delete popup.
+    setTimeout(() => {
+      deleteButtonRef.current?.focus();
+    }, 0);
+  }
+
   return (
     <div className="max-w-lg mx-auto p-3 w-full">
       <h1 className="my-7 text-center font-bold text-3xl">Profile</h1>
@@ -172,6 +184,8 @@ export default function DashProfile() {
           <span
             onClick={() => setShowDeletePopup(true)}
             className="cursor-pointer"
+            ref={deleteButtonRef}
+            tabIndex="-1"
           >
             Delete Account
           </span>
@@ -201,7 +215,7 @@ export default function DashProfile() {
         show={showDeletePopup}
         dismissible
         popup
-        onClose={() => setShowDeletePopup(false)}
+        onClose={handleCloseModal}
         className={theme}
         size="md"
       >
@@ -229,7 +243,7 @@ export default function DashProfile() {
                 type="button"
                 color="alternative"
                 className="hover:bg-zinc-200"
-                onClick={() => setShowDeletePopup(false)}
+                onClick={handleCloseModal}
               >
                 No, cancel
               </Button>

@@ -7,7 +7,7 @@ import {
 import Logo from "./Logo";
 import { IoMdMail } from "react-icons/io";
 
-export default function Footercom() {
+export default function FooterComponent() {
   return (
     <Footer container className="border border-t-4 border-pink-500">
       <div className="w-full">

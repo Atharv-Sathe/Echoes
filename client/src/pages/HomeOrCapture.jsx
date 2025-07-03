@@ -1,9 +1,8 @@
 import { useSelector } from "react-redux";
-import { CapturePage } from "./CapturePage";
-import Home from "./Home";
+import { Navigate } from "react-router-dom";
 
 export default function HomeOrCapture() {
   const { currentUser } = useSelector((state) => state.user);
 
-  return currentUser ? <CapturePage /> : <Home />;
+  return currentUser ? <Navigate to="/new" /> : <Navigate to="/home" />;
 }

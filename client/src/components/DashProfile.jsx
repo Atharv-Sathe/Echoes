@@ -205,7 +205,7 @@ export default function DashProfile() {
           {loading ? "Updating.." : "Update"}
         </Button>
       </form>
-      <Link to={'create-post'}>
+      <Link to={'/create-post'}>
         <Button
           type="button"
           className="max-w-lg mx-auto p-1 mt-4 w-full"

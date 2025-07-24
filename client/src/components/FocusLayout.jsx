@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { Link, Outlet } from "react-router-dom";
-import { HiViewGrid } from 'react-icons/hi';
+import { HiViewGrid } from "react-icons/hi";
 
 export default function FocusLayout() {
   return (

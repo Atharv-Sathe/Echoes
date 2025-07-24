@@ -1,9 +1,10 @@
-import FocusLayout from "../components/FocusLayout";
+import Tiptap from "../components/TipTap";
 
 export function CapturePage() {
-    return (
-        <FocusLayout>
-        <h1>Capture Page</h1>
-        </FocusLayout>
-    )
+  return (
+    <div>
+      <h1 className="text-white">Start your masterpiece....!</h1>
+      <Tiptap/>
+    </div>
+  );
 }

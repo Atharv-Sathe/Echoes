@@ -2,8 +2,8 @@
 
 import TiptapEditor from "./TipTapEditor";
 import StarterKit from "@tiptap/starter-kit";
+// import Placeholder from "@tiptap/extension-placeholder";
 import PropTypes from "prop-types";
-// import Placeholder from '@tiptap/extension-placeholder';
 
 // A specific "flavor" of the editor for the initial capture page.
 export default function EditorZen({ content, onContentChange }) {
@@ -18,7 +18,7 @@ export default function EditorZen({ content, onContentChange }) {
     }),
     // Placeholder.configure({
     //   // The text that appears when the editor is empty.
-    //   placeholder: 'Let the words flow...',
+    //   placeholder: "Let the words flow...",
     // }),
   ];
 
@@ -28,7 +28,6 @@ export default function EditorZen({ content, onContentChange }) {
       onContentChange={onContentChange}
       extensions={zenExtensions}
       editorClass="p-4 h-[30rem] max-h-[40rem]" // Add some padding inside the editor
-      placeholder="Let the words flow..." // Placeholder text for the editor
     />
   );
 }

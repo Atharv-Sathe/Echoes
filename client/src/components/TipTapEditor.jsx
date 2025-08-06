@@ -1,10 +1,14 @@
-// client/src/components/TiptapEditor.jsx
-
-import { useEditor, EditorContent } from '@tiptap/react';
-import PropTypes from 'prop-types';
+import { useEditor, EditorContent } from "@tiptap/react";
+import PropTypes from "prop-types";
+import { useEffect } from "react";
 
 // This is our flexible base editor component.
-export default function TiptapEditor({ content, onContentChange, extensions, editorClass, placeholder }) {
+export default function TiptapEditor({
+  content,
+  onContentChange,
+  extensions,
+  editorClass,
+}) {
   const editor = useEditor({
     // The 'extensions' prop allows us to define different feature sets.
     extensions: extensions,
@@ -16,11 +20,6 @@ export default function TiptapEditor({ content, onContentChange, extensions, edi
       onContentChange(editor.getHTML());
     },
 
-    placeholder: {
-      // The text that appears when the editor is empty.
-      placeholder: placeholder  ? placeholder : 'Start typing...',
-    },
-
     // Pass editor-specific props.
     editorProps: {
       attributes: {
@@ -30,24 +29,21 @@ export default function TiptapEditor({ content, onContentChange, extensions, edi
     },
   });
 
-  // This sets the placeholder text dynamically if the editor supports it.
-  // Note: This requires the Placeholder extension to be in the 'extensions' array.
-  if (editor && placeholder) {
-    const placeholderExt = editor.extensionManager.extensions.find(
-      (ext) => ext.name === 'placeholder'
-    );
-    if (placeholderExt && placeholderExt.options) {
-      placeholderExt.options.placeholder = placeholder;
+  // This effect ensures that the editor's content is set correctly when it mounts or when 'content' changes.
+  // This is important for cases where the content might be updated externally.
+  useEffect(() => {
+    if (editor && editor.getHTML() !== content) {
+      editor.commands.setContent(content, false);
+      // console.log("Editor content set to: ", content);
     }
-  }
+  }, [editor, content]);
 
   return <EditorContent editor={editor} />;
 }
 
 TiptapEditor.propTypes = {
-    content: PropTypes.string.isRequired,
-    onContentChange: PropTypes.func.isRequired,
-    extensions: PropTypes.array.isRequired,
-    editorClass: PropTypes.string,
-    placeholder: PropTypes.string,
-}
+  content: PropTypes.string.isRequired,
+  onContentChange: PropTypes.func.isRequired,
+  extensions: PropTypes.array.isRequired,
+  editorClass: PropTypes.string,
+};
